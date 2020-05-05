@@ -39,11 +39,8 @@ import org.apache.calcite.schema.impl.AbstractTable;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.tools.FrameworkConfig;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Standard implementation of {@link SqlExprToRexConverter}.
@@ -75,7 +72,8 @@ public class SqlExprToRexConverterImpl implements SqlExprToRexConverter {
 
 	@Override
 	public RexNode[] convertToRexNodes(String[] exprs) {
-		String query = String.format(QUERY_FORMAT, String.join(",", exprs));
+		String query = String.format(QUERY_FORMAT, String.join(",",
+			Arrays.stream(exprs).map(s -> "`"+s+"`").collect(Collectors.toList())));
 		SqlNode parsed = planner.parser().parse(query);
 		SqlNode validated = planner.validate(parsed);
 		RelNode rel = planner.rel(validated).rel;

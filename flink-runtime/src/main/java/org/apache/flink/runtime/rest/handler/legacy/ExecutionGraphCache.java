@@ -87,6 +87,8 @@ public class ExecutionGraphCache implements Closeable {
 	private CompletableFuture<ArchivedExecutionGraph> getExecutionGraphInternal(JobID jobId, RestfulGateway restfulGateway) {
 		Preconditions.checkState(running, "ExecutionGraphCache is no longer running");
 
+		cleanup();
+
 		while (true) {
 			final ExecutionGraphEntry oldEntry = cachedExecutionGraphs.get(jobId);
 
