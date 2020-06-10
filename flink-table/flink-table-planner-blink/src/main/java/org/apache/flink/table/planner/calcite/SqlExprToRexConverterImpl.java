@@ -72,8 +72,7 @@ public class SqlExprToRexConverterImpl implements SqlExprToRexConverter {
 
 	@Override
 	public RexNode[] convertToRexNodes(String[] exprs) {
-		String query = String.format(QUERY_FORMAT, String.join(",",
-			Arrays.stream(exprs).map(s -> "`"+s+"`").collect(Collectors.toList())));
+		String query = String.format(QUERY_FORMAT, String.join(",", exprs));
 		SqlNode parsed = planner.parser().parse(query);
 		SqlNode validated = planner.validate(parsed);
 		RelNode rel = planner.rel(validated).rel;
